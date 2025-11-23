@@ -3,10 +3,10 @@ package com.eyuppastirmaci.safekeys.theme
 import androidx.compose.ui.graphics.Color
 
 // Brand Colors
-val PrimaryLight = Color(0xFF4355B9) // Moderate Indigo
+val PrimaryLight = Color(0xFF5C6EF8) // Vibrant periwinkle
 val OnPrimaryLight = Color(0xFFFFFFFF)
-val PrimaryContainerLight = Color(0xFFDEE0FF)
-val OnPrimaryContainerLight = Color(0xFF00105C)
+val PrimaryContainerLight = Color(0xFFE4E7FF)
+val OnPrimaryContainerLight = Color(0xFF111641)
 
 val SecondaryLight = Color(0xFF5B5D72) // Slate-ish
 val OnSecondaryLight = Color(0xFFFFFFFF)
@@ -28,14 +28,14 @@ val BackgroundLight = Color(0xFFFFFFFF)
 val OnBackgroundLight = Color(0xFF000000)
 val SurfaceLight = Color(0xFFFFFFFF)
 val OnSurfaceLight = Color(0xFF000000)
-val SurfaceVariantLight = Color(0xFFE7E0EC) // Slightly darker for inputs/borders
+val SurfaceVariantLight = Color(0xFFE7E0EC)
 val OnSurfaceVariantLight = Color(0xFF49454F)
 
 // Dark Theme Colors
-val PrimaryDark = Color(0xFFBAC3FF) // Lighter Indigo for dark mode contrast
-val OnPrimaryDark = Color(0xFF0F218A)
-val PrimaryContainerDark = Color(0xFF293CA0)
-val OnPrimaryContainerDark = Color(0xFFDEE0FF)
+val PrimaryDark = Color(0xFFBFC6FF)
+val OnPrimaryDark = Color(0xFF1A2471)
+val PrimaryContainerDark = Color(0xFF3A48AD)
+val OnPrimaryContainerDark = Color(0xFFE6E8FF)
 
 val SecondaryDark = Color(0xFFC3C5DD)
 val OnSecondaryDark = Color(0xFF2D2F42)
@@ -52,12 +52,12 @@ val OnErrorDark = Color(0xFF690005)
 val ErrorContainerDark = Color(0xFF93000A)
 val OnErrorContainerDark = Color(0xFFFFDAD6)
 
-// Dark Theme: Black Background, White Text
-val BackgroundDark = Color(0xFF000000)
-val OnBackgroundDark = Color(0xFFFFFFFF)
-val SurfaceDark = Color(0xFF000000)
-val OnSurfaceDark = Color(0xFFFFFFFF)
-val SurfaceVariantDark = Color(0xFF49454F)
+// Dark Theme: Deep black background
+val BackgroundDark = Color(0xFF000000) // Pure black
+val OnBackgroundDark = Color(0xFFE4E8FF)
+val SurfaceDark = Color(0xFF0A0A0A) // Almost black
+val OnSurfaceDark = Color(0xFFE6EAFF)
+val SurfaceVariantDark = Color(0xFF1A1A1A) // Very dark gray
 val OnSurfaceVariantDark = Color(0xFFCAC4D0)
 
 

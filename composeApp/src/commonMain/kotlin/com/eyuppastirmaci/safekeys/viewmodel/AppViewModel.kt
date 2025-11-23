@@ -57,9 +57,17 @@ class AppViewModel(
         private set
 
     private var toastJob: Job? = null
+    private var hasSyncedSystemTheme = false
 
     fun toggleTheme() {
         isDarkTheme = !isDarkTheme
+    }
+
+    fun ensureInitialTheme(isSystemDark: Boolean) {
+        if (!hasSyncedSystemTheme) {
+            isDarkTheme = isSystemDark
+            hasSyncedSystemTheme = true
+        }
     }
 
     fun updateLengthText(text: String) {
