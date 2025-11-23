@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.DarkMode
@@ -19,8 +20,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.eyuppastirmaci.safekeys.components.shared.TextInput
 import com.eyuppastirmaci.safekeys.config.PasswordConfig
 import com.eyuppastirmaci.safekeys.password.PasswordStrength
 import com.eyuppastirmaci.safekeys.platform.getClipboardHelper
@@ -73,14 +76,14 @@ fun MainScreenContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        TextField(
+        TextInput(
             value = viewModel.lengthText,
             onValueChange = { viewModel.updateLengthText(it) },
-            label = {
-                Text("Password length (${PasswordConfig.MIN_PASSWORD_LENGTH}–${PasswordConfig.MAX_PASSWORD_LENGTH})")
-            },
+            label = "Password length (${PasswordConfig.MIN_PASSWORD_LENGTH}–${PasswordConfig.MAX_PASSWORD_LENGTH})",
+            placeholder = "16",
             singleLine = true,
-            modifier = Modifier.width(300.dp)
+            modifier = Modifier.width(300.dp),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -128,12 +131,14 @@ fun MainScreenContent(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    TextField(
+                    TextInput(
                         value = viewModel.guessesPerSecondText,
                         onValueChange = { viewModel.updateGuessesPerSecondText(it) },
-                        label = { Text("Guesses/sec") },
+                        label = "Guesses/sec",
+                        placeholder = "1000000000000",
                         singleLine = true,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
                     
                     Spacer(modifier = Modifier.width(8.dp))
