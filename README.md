@@ -13,7 +13,7 @@ SafeKeys is a open-source password generator that helps you create strong, secur
 ## ✨ Features
 
 - 🎯 **Customizable Password Generation**
-  - Configurable password length (8-128 characters)
+  - Configurable password length (8-512 characters)
   - Include/exclude uppercase, lowercase, numbers, and symbols
   - Option to exclude ambiguous characters (i, l, 1, L, o, 0, O)
 
