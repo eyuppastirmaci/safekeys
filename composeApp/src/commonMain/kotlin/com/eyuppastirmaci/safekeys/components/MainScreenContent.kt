@@ -7,6 +7,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material3.*
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
@@ -20,8 +22,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.eyuppastirmaci.safekeys.config.PasswordConfig
+import com.eyuppastirmaci.safekeys.password.PasswordStrength
 import com.eyuppastirmaci.safekeys.platform.getClipboardHelper
+import com.eyuppastirmaci.safekeys.theme.StrengthFair
+import com.eyuppastirmaci.safekeys.theme.StrengthGood
+import com.eyuppastirmaci.safekeys.theme.StrengthStrong
+import com.eyuppastirmaci.safekeys.theme.StrengthWeak
 import com.eyuppastirmaci.safekeys.viewmodel.AppViewModel
+
+@Composable
+fun getStrengthColor(strength: PasswordStrength): Color {
+    return when (strength) {
+        PasswordStrength.WEAK -> StrengthWeak
+        PasswordStrength.FAIR -> StrengthFair
+        PasswordStrength.GOOD -> StrengthGood
+        PasswordStrength.STRONG -> StrengthStrong
+    }
+}
 
 @Composable
 fun MainScreenContent(
@@ -36,10 +53,23 @@ fun MainScreenContent(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "SafeKeys",
-            style = MaterialTheme.typography.headlineMedium
-        )
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                text = "SafeKeys",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.align(Alignment.Center)
+            )
+
+            IconButton(
+                onClick = { viewModel.toggleTheme() },
+                modifier = Modifier.align(Alignment.CenterEnd)
+            ) {
+                Icon(
+                    imageVector = if (viewModel.isDarkTheme) Icons.Filled.LightMode else Icons.Filled.DarkMode,
+                    contentDescription = "Toggle theme"
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -177,7 +207,7 @@ fun MainScreenContent(
                                 Text(
                                     text = "Strength: ${metrics.strength.label}",
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = Color(metrics.strength.color),
+                                    color = getStrengthColor(metrics.strength),
                                     fontWeight = FontWeight.Bold
                                 )
                             }
@@ -187,7 +217,7 @@ fun MainScreenContent(
                             // Progress Bar
                             LinearProgressIndicator(
                                 progress = { metrics.strength.progress },
-                                color = Color(metrics.strength.color),
+                                color = getStrengthColor(metrics.strength),
                                 trackColor = MaterialTheme.colorScheme.surfaceVariant,
                                 modifier = Modifier
                                     .fillMaxWidth()

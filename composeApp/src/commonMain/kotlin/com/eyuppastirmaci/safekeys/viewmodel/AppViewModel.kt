@@ -53,7 +53,14 @@ class AppViewModel(
     var isToastVisible by mutableStateOf(false)
         private set
 
+    var isDarkTheme by mutableStateOf(false)
+        private set
+
     private var toastJob: Job? = null
+
+    fun toggleTheme() {
+        isDarkTheme = !isDarkTheme
+    }
 
     fun updateLengthText(text: String) {
         lengthText = text.filter { it.isDigit() }

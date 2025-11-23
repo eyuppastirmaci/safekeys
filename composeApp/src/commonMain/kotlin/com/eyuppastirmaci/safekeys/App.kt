@@ -11,34 +11,40 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.eyuppastirmaci.safekeys.components.MainScreenContent
 import com.eyuppastirmaci.safekeys.components.ToastNotification
-import com.eyuppastirmaci.safekeys.theme.getAppTypography
+import com.eyuppastirmaci.safekeys.theme.AppTheme
 import com.eyuppastirmaci.safekeys.viewmodel.AppViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+import androidx.compose.material3.Surface
 
 @Composable
 @Preview
 fun App() {
     val viewModel: AppViewModel = viewModel { AppViewModel() }
-    val appTypography = getAppTypography()
 
-    MaterialTheme(
-        typography = appTypography
+    AppTheme(
+        darkTheme = viewModel.isDarkTheme
     ) {
-        Box(
-            modifier = Modifier.fillMaxSize()
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
         ) {
-            MainScreenContent(
-                viewModel = viewModel,
-                modifier = Modifier.align(Alignment.Center)
-            )
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                MainScreenContent(
+                    viewModel = viewModel,
+                    modifier = Modifier.align(Alignment.Center)
+                )
 
-            ToastNotification(
-                isVisible = viewModel.isToastVisible,
-                message = viewModel.toastMessage,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(top = 16.dp, end = 16.dp)
-            )
+                ToastNotification(
+                    isVisible = viewModel.isToastVisible,
+                    message = viewModel.toastMessage,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(top = 16.dp, end = 16.dp)
+                )
+            }
         }
     }
 }
