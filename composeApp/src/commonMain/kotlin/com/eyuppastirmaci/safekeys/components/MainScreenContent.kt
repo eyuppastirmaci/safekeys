@@ -3,6 +3,7 @@ package com.eyuppastirmaci.safekeys.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
@@ -10,8 +11,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.eyuppastirmaci.safekeys.config.PasswordConfig
 import com.eyuppastirmaci.safekeys.platform.getClipboardHelper
@@ -43,7 +48,8 @@ fun MainScreenContent(
             label = {
                 Text("Password length (${PasswordConfig.MIN_PASSWORD_LENGTH}–${PasswordConfig.MAX_PASSWORD_LENGTH})")
             },
-            singleLine = true
+            singleLine = true,
+            modifier = Modifier.width(300.dp)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -72,6 +78,11 @@ fun MainScreenContent(
                 checked = viewModel.includeSymbols,
                 onCheckedChange = { viewModel.updateIncludeSymbols(it) }
             )
+            PasswordOptionRow(
+                label = "Exclude Ambiguous (il1...)",
+                checked = viewModel.excludeAmbiguous,
+                onCheckedChange = { viewModel.updateExcludeAmbiguous(it) }
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -86,33 +97,88 @@ fun MainScreenContent(
 
         when {
             viewModel.password != null -> {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .pointerHoverIcon(PointerIcon.Hand)
-                            .clickable {
-                                viewModel.password?.let { pass ->
-                                    clipboardHelper.copyToClipboard(pass)
-                                    viewModel.showToast("Password copied!")
-                                }
-                            }
-                            .padding(8.dp)
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = viewModel.password!!,
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Icon(
-                            imageVector = Icons.Filled.ContentCopy,
-                            contentDescription = "Copy password",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier
+                                .pointerHoverIcon(PointerIcon.Hand)
+                                .clickable {
+                                    viewModel.password?.let { pass ->
+                                        clipboardHelper.copyToClipboard(pass)
+                                        viewModel.showToast("Password copied!")
+                                    }
+                                }
+                                .padding(8.dp)
+                        ) {
+                            Text(
+                                text = viewModel.password!!,
+                                style = MaterialTheme.typography.titleLarge,
+                                modifier = Modifier.weight(1f, fill = false),
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Icon(
+                                imageVector = Icons.Filled.ContentCopy,
+                                contentDescription = "Copy password",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
+                    
+                    viewModel.passwordMetrics?.let { metrics ->
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.width(300.dp)
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Start,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = "Strength: ${metrics.strength.label}",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Color(metrics.strength.color),
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                            
+                            Spacer(modifier = Modifier.height(4.dp))
+                            
+                            // Progress Bar
+                            LinearProgressIndicator(
+                                progress = metrics.strength.progress,
+                                color = Color(metrics.strength.color),
+                                trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(8.dp)
+                                    .clip(RoundedCornerShape(4.dp))
+                            )
+                            
+                            Spacer(modifier = Modifier.height(4.dp))
+                            
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Start,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = "Crack time: ${metrics.crackTimeDisplay}",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
                     }
                 }
             }

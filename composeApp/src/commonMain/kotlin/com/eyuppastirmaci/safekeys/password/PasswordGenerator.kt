@@ -9,6 +9,7 @@ class PasswordGenerator {
         const val LOWERCASE = "abcdefghijklmnopqrstuvwxyz"
         const val NUMBERS = "0123456789"
         const val SYMBOLS = "!@#\$%^&*()-_=+[]{};:,.?/"
+        const val AMBIGUOUS = "il1Lo0O"
     }
 
     fun generate(
@@ -16,17 +17,22 @@ class PasswordGenerator {
         includeUppercase: Boolean,
         includeLowercase: Boolean,
         includeNumbers: Boolean,
-        includeSymbols: Boolean
+        includeSymbols: Boolean,
+        excludeAmbiguous: Boolean = false
     ): String {
         require(length in PasswordConfig.MIN_PASSWORD_LENGTH..PasswordConfig.MAX_PASSWORD_LENGTH) {
             "Password length must be between ${PasswordConfig.MIN_PASSWORD_LENGTH} and ${PasswordConfig.MAX_PASSWORD_LENGTH}"
         }
 
-        val chars = buildString {
+        var chars = buildString {
             if (includeUppercase) append(UPPERCASE)
             if (includeLowercase) append(LOWERCASE)
             if (includeNumbers) append(NUMBERS)
             if (includeSymbols) append(SYMBOLS)
+        }
+
+        if (excludeAmbiguous) {
+            chars = chars.filter { it !in AMBIGUOUS }
         }
 
         if (chars.isEmpty()) {
@@ -39,6 +45,27 @@ class PasswordGenerator {
                 append(chars[index])
             }
         }
+    }
+
+    fun calculatePoolSize(
+        includeUppercase: Boolean,
+        includeLowercase: Boolean,
+        includeNumbers: Boolean,
+        includeSymbols: Boolean,
+        excludeAmbiguous: Boolean = false
+    ): Int {
+        var chars = buildString {
+            if (includeUppercase) append(UPPERCASE)
+            if (includeLowercase) append(LOWERCASE)
+            if (includeNumbers) append(NUMBERS)
+            if (includeSymbols) append(SYMBOLS)
+        }
+        
+        if (excludeAmbiguous) {
+            chars = chars.filter { it !in AMBIGUOUS }
+        }
+        
+        return chars.length
     }
 }
 

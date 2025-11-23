@@ -6,6 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyuppastirmaci.safekeys.config.PasswordConfig
+import com.eyuppastirmaci.safekeys.model.PasswordMetrics
+import com.eyuppastirmaci.safekeys.password.PasswordAnalyzer
 import com.eyuppastirmaci.safekeys.password.PasswordGenerator
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -16,6 +18,9 @@ class AppViewModel(
 ) : ViewModel() {
 
     var password by mutableStateOf<String?>(null)
+        private set
+
+    var passwordMetrics by mutableStateOf<PasswordMetrics?>(null)
         private set
 
     var errorMessage by mutableStateOf<String?>(null)
@@ -31,6 +36,9 @@ class AppViewModel(
     var includeNumbers by mutableStateOf(true)
         private set
     var includeSymbols by mutableStateOf(true)
+        private set
+
+    var excludeAmbiguous by mutableStateOf(false)
         private set
 
     var toastMessage by mutableStateOf("")
@@ -61,6 +69,10 @@ class AppViewModel(
         includeSymbols = include
     }
 
+    fun updateExcludeAmbiguous(exclude: Boolean) {
+        excludeAmbiguous = exclude
+    }
+
     fun showToast(message: String) {
         toastJob?.cancel()
         toastJob = viewModelScope.launch {
@@ -89,12 +101,24 @@ class AppViewModel(
                         includeUppercase,
                         includeLowercase,
                         includeNumbers,
-                        includeSymbols
+                        includeSymbols,
+                        excludeAmbiguous
                     )
+                    
+                    val poolSize = passwordGenerator.calculatePoolSize(
+                        includeUppercase,
+                        includeLowercase,
+                        includeNumbers,
+                        includeSymbols,
+                        excludeAmbiguous
+                    )
+                    passwordMetrics = PasswordAnalyzer.calculateMetrics(password!!, poolSize)
+                    
                     errorMessage = null
                 } catch (e: IllegalArgumentException) {
                     errorMessage = e.message
                     password = null
+                    passwordMetrics = null
                 }
             }
         }
