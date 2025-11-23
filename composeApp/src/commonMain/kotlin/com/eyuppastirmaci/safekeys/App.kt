@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.eyuppastirmaci.safekeys.components.MainScreenContent
 import com.eyuppastirmaci.safekeys.components.ToastNotification
+import com.eyuppastirmaci.safekeys.theme.getAppTypography
 import com.eyuppastirmaci.safekeys.viewmodel.AppViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -18,8 +19,11 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Preview
 fun App() {
     val viewModel: AppViewModel = viewModel { AppViewModel() }
+    val appTypography = getAppTypography()
 
-    MaterialTheme {
+    MaterialTheme(
+        typography = appTypography
+    ) {
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
