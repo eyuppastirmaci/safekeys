@@ -95,13 +95,23 @@ fun MainScreenContent(
                 
                 Spacer(modifier = Modifier.height(8.dp))
                 
-                TextField(
-                    value = viewModel.guessesPerSecondText,
-                    onValueChange = { viewModel.updateGuessesPerSecondText(it) },
-                    label = { Text("Guesses/sec") },
-                    singleLine = true,
-                    modifier = Modifier.width(300.dp)
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TextField(
+                        value = viewModel.guessesPerSecondText,
+                        onValueChange = { viewModel.updateGuessesPerSecondText(it) },
+                        label = { Text("Guesses/sec") },
+                        singleLine = true,
+                        modifier = Modifier.weight(1f)
+                    )
+                    
+                    Spacer(modifier = Modifier.width(8.dp))
+                    
+                    InfoTooltip(
+                        text = "The number of password guesses an attacker can attempt per second. Higher values mean faster cracking hardware."
+                    )
+                }
             }
         }
 
