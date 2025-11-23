@@ -5,7 +5,7 @@ import kotlin.math.log2
 import kotlin.math.pow
 
 object PasswordAnalyzer {
-    fun calculateMetrics(password: String, poolSize: Int): PasswordMetrics {
+    fun calculateMetrics(password: String, poolSize: Int, guessesPerSecond: Double = 1_000_000_000_000.0): PasswordMetrics {
         if (poolSize == 0 || password.isEmpty()) {
             return PasswordMetrics(PasswordStrength.WEAK, "Instantly")
         }
@@ -44,13 +44,11 @@ object PasswordAnalyzer {
             else -> PasswordStrength.STRONG
         }
         
-        val crackTime = calculateCrackTime(actualEntropy)
+        val crackTime = calculateCrackTime(actualEntropy, guessesPerSecond)
         return PasswordMetrics(strength, crackTime)
     }
 
-    private fun calculateCrackTime(entropy: Double): String {
-        // Assume 1 trillion guesses per second (powerful brute force)
-        val guessesPerSecond = 1_000_000_000_000.0
+    private fun calculateCrackTime(entropy: Double, guessesPerSecond: Double): String {
         val seconds = 2.0.pow(entropy) / guessesPerSecond
         
         return when {

@@ -41,6 +41,12 @@ class AppViewModel(
     var excludeAmbiguous by mutableStateOf(false)
         private set
 
+    var isAdvancedOptionsVisible by mutableStateOf(false)
+        private set
+
+    var guessesPerSecondText by mutableStateOf("1000000000000")
+        private set
+
     var toastMessage by mutableStateOf("")
         private set
     
@@ -71,6 +77,17 @@ class AppViewModel(
 
     fun updateExcludeAmbiguous(exclude: Boolean) {
         excludeAmbiguous = exclude
+    }
+
+    fun toggleAdvancedOptions() {
+        isAdvancedOptionsVisible = !isAdvancedOptionsVisible
+    }
+
+    fun updateGuessesPerSecondText(text: String) {
+        // Only allow digits
+        if (text.all { it.isDigit() }) {
+            guessesPerSecondText = text
+        }
     }
 
     fun showToast(message: String) {
@@ -112,7 +129,9 @@ class AppViewModel(
                         includeSymbols,
                         excludeAmbiguous
                     )
-                    passwordMetrics = PasswordAnalyzer.calculateMetrics(password!!, poolSize)
+                    
+                    val guessesPerSecond = guessesPerSecondText.toDoubleOrNull() ?: 1_000_000_000_000.0
+                    passwordMetrics = PasswordAnalyzer.calculateMetrics(password!!, poolSize, guessesPerSecond)
                     
                     errorMessage = null
                 } catch (e: IllegalArgumentException) {

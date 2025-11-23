@@ -8,6 +8,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material3.*
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -78,11 +79,30 @@ fun MainScreenContent(
                 checked = viewModel.includeSymbols,
                 onCheckedChange = { viewModel.updateIncludeSymbols(it) }
             )
-            PasswordOptionRow(
-                label = "Exclude Ambiguous (il1...)",
-                checked = viewModel.excludeAmbiguous,
-                onCheckedChange = { viewModel.updateExcludeAmbiguous(it) }
-            )
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            TextButton(onClick = { viewModel.toggleAdvancedOptions() }) {
+                Text(if (viewModel.isAdvancedOptionsVisible) "Hide Advanced Options" else "Show Advanced Options")
+            }
+            
+            if (viewModel.isAdvancedOptionsVisible) {
+                PasswordOptionRow(
+                    label = "Exclude Ambiguous (il1...)",
+                    checked = viewModel.excludeAmbiguous,
+                    onCheckedChange = { viewModel.updateExcludeAmbiguous(it) }
+                )
+                
+                Spacer(modifier = Modifier.height(8.dp))
+                
+                TextField(
+                    value = viewModel.guessesPerSecondText,
+                    onValueChange = { viewModel.updateGuessesPerSecondText(it) },
+                    label = { Text("Guesses/sec") },
+                    singleLine = true,
+                    modifier = Modifier.width(300.dp)
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -156,7 +176,7 @@ fun MainScreenContent(
                             
                             // Progress Bar
                             LinearProgressIndicator(
-                                progress = metrics.strength.progress,
+                                progress = { metrics.strength.progress },
                                 color = Color(metrics.strength.color),
                                 trackColor = MaterialTheme.colorScheme.surfaceVariant,
                                 modifier = Modifier
